@@ -88,9 +88,9 @@ ctx.fillText('Hello world', 50, 100);
 
 ### Using browser debugger protocol
 ```javascript
-import {getBrowser, createCanvas} from 'puppet-canvas';
+import {createCanvas} from 'puppet-canvas';
 const browser = puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
-getBrowser(browser);
+const canvas = await createCanvas({browser, width: 200, height: 200});
 ```
 
 ## Implementation
