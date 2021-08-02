@@ -1,5 +1,4 @@
-import { JSEvalable, SerializableOrJSHandle, ElementHandle, JSHandle, Page, ScreenshotOptions } from 'puppeteer';
-import { getBrowser, closeBrowser } from './browser';
+import puppeteer, { JSEvalable, SerializableOrJSHandle, ElementHandle, JSHandle, Page, ScreenshotOptions, Browser } from 'puppeteer';
 
 type PropName = string | number;
 
@@ -25,6 +24,20 @@ type ReferenceType = '_deferred_';
 interface DeferredReference {
   type: ReferenceType;
   id: string;
+}
+
+let _browser: Browser | null = null;
+
+export async function getBrowser(browser?: puppeteer.Browser): Promise<Browser> {
+  _browser = browser || await puppeteer.launch({ headless: true });
+  return _browser;
+}
+
+export async function closeBrowser(): Promise<void> {
+  if (_browser) {
+    await _browser.close();
+    _browser = null;
+  }
 }
 
 function proxy<T>(handler: ProxyHandler, path: string[] = [], refId?: string): T {
@@ -173,9 +186,14 @@ export async function linkCanvas(canvas: ElementHandle<HTMLCanvasElement>): Prom
   return initializeCanvas(canvas);
 }
 
-export async function createCanvas(width: number, height: number): Promise<HTMLCanvasElement> {
+interface createCanvasProps {
+  browser?: puppeteer.Browser;
+  width: number;
+  height: number;
+}
+
+export async function createCanvas({browser, width, height}: createCanvasProps): Promise<HTMLCanvasElement> {
   const html = `<canvas width="${width}" height="${height}"></canvas>`;
-  const browser = await getBrowser();
   const page = await browser.newPage();
   await page.setContent(html);
   const canvasElement: ElementHandle<HTMLCanvasElement> | null = await page.$('canvas');

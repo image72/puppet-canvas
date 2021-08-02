@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pshihn/puppet-canvas.git"
+    "url": "git+https://github.com/image72/puppet-canvas.git"
   },
   "keywords": [
     "puppeteer",
@@ -19,15 +19,15 @@
   "author": "Preet Shihn",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pshihn/puppet-canvas/issues"
+    "url": "https://github.com/image72/puppet-canvas/issues"
   },
-  "homepage": "https://github.com/pshihn/puppet-canvas#readme",
+  "homepage": "https://github.com/image72/puppet-canvas#readme",
   "devDependencies": {
-    "@types/puppeteer": "^2.1.5",
+    "@types/puppeteer": "^5.4.4",
     "tslint": "^6.1.3",
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "puppeteer": "^2.1.1"
+    "puppeteer": "^10.1.0"
   }
 }

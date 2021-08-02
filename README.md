@@ -1,5 +1,5 @@
 # puppet-canvas
-puppet-canvas is a [Puppeteer](https://github.com/puppeteer/puppeteer) backed implementation of HTML [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) for NodeJS. 
+puppet-canvas is a [Puppeteer](https://github.com/puppeteer/puppeteer) backed implementation of HTML [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) for NodeJS.
 
 <img alt="puppet-canvas logo" src="https://user-images.githubusercontent.com/833927/73148934-a7de4580-4073-11ea-9956-f88bb8355d8f.png" height="200" align="right">
 
@@ -69,7 +69,7 @@ ctx.fillRect(20, 20, 200, 100);
 ```
 
 ### Using custom fonts
-When using a custom font for rendering text, you can ensure the font is loaded by calling the `loadFont` methods. 
+When using a custom font for rendering text, you can ensure the font is loaded by calling the `loadFont` methods.
 
 ```javascript
 import { createCanvas, loadFont } from 'puppet-canvas';
@@ -86,12 +86,19 @@ ctx.font = `bold 48px Bangers`;
 ctx.fillText('Hello world', 50, 100);
 ```
 
+### Using browser debugger protocol
+```javascript
+import {getBrowser, createCanvas} from 'puppet-canvas';
+const browser = puppeteer.connect({ browserWSEndpoint: 'ws://localhost:3000' });
+getBrowser(browser);
+```
+
 ## Implementation
-**puppet-canvas** creates a canvas on a puppeteer instance, and exposes the API via a JavaScript Proxy. 
+**puppet-canvas** creates a canvas on a puppeteer instance, and exposes the API via a JavaScript Proxy.
 
 A side effect of this is that all calls, essentially become `async`. For normal drawing, one doesn't need to `await` each command unless a value is being returned.
 
-A *proxied* solution is somewhat better than alternate ones because, firstly, the rendering is exactly what the browser would have rendered (Chrome). Secondly, this is mostly future-proof since all methods are just proxied to the actual instance. So, any new API added to the Canvas, should automagically work. 
+A *proxied* solution is somewhat better than alternate ones because, firstly, the rendering is exactly what the browser would have rendered (Chrome). Secondly, this is mostly future-proof since all methods are just proxied to the actual instance. So, any new API added to the Canvas, should automagically work.
 
 #### Implentation Shortcomings
 
@@ -109,19 +116,19 @@ const imageDataLength = await (await imageData.data).length;
 
 #### Why don't I just use puppeteer
 
-Yes, you can and for some cases it may even be a better dev experience. 
+Yes, you can and for some cases it may even be a better dev experience.
 
 **puppet-canvas** provides a simple abstraction layer so you don't have to jump in and out of Puppeteer's execution context all the time. You treat the canvas very similar to canvas on the web, and not worry much about anything else.
 
 ## Full API
 
 #### createCanvas(width: number, height: number) => Promise\<HTMLCanvasElement\>
-  
+
 Creates a canvas instance with the specified width and height (in pixels)
 
 #### linkCanvas(canvas: ElementHandle\<HTMLCanvasElement\>) => Promise\<HTMLCanvasElement\>
 
-Say, you want to use this with an existing instance of puppeteer, you can pass in the ElementHandle of the canvase in your page. 
+Say, you want to use this with an existing instance of puppeteer, you can pass in the ElementHandle of the canvase in your page.
 
 #### close() => Promise
 
@@ -129,7 +136,7 @@ Close associated puppeteer instance. Usually called at the end.
 
 #### releaseCanvas(canvas: HTMLCanvasElement) => Promise
 
-Release the canvas instance, if you do not want puppet-canvas to proxy it anymore, but still want to keep the canvas instance around 
+Release the canvas instance, if you do not want puppet-canvas to proxy it anymore, but still want to keep the canvas instance around
 
 #### screenshotCanvas(canvas: HTMLCanvasElement, options?: ScreenshotOptions) => Promise<string | Buffer>
 Take a screenshot of the canvas. The method optionally takes in `ScreenshotOptions` which are the same options as described in [Puppeteer screenshot method](https://pptr.dev/#?product=Puppeteer&version=v2.0.0&show=api-pagescreenshotoptions)
@@ -138,7 +145,7 @@ Take a screenshot of the canvas. The method optionally takes in `ScreenshotOptio
 Load a font for the canvas element to use. **name** is the `font-family` name of the font. **url** is the url to the font file (like a `woff` file)
 
 #### loadImage(url: string, canvas: HTMLCanvasElement, page?: Page) => Promise\<HTMLImageElement\>
-Load an image from a URL that could be used by the canvas, e.g. for drawing the image on the canvas. 
+Load an image from a URL that could be used by the canvas, e.g. for drawing the image on the canvas.
 
 
 ## License
